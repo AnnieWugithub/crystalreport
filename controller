@@ -1,0 +1,44 @@
+using CrystalDecision.CrystalReports.Engine;
+
+
+
+using(ReportDocument reportDocument = new Reportdocument()){
+
+var obj = obj.select(o=>new{
+    car =o.car,
+    byical =o.byical
+}).ToList();
+
+///子報表的名稱
+reportDocument.Database.tables["子報表名稱1"].SetDatasource(obj);
+reportDocument.Database.tables["子報表名稱2"].SetDatasource(obj2);
+reportDocument.Database.tables["Message"].SetDatasource(msg);
+
+//主檔 參數型
+
+reportDocument.SetParameterValue("id",obj.id)//主檔欄位名稱
+reportDocument.SetParameterValue("name",obj.name)
+
+Response.Buffer=false;
+Response.ClearContent();
+Response.ClearHeader();
+
+Stream stream = reportDocument.ExporttoStream(CrystalDecisions.Shared.ExportFormatTpye.PortableDocFormat);
+stream.Seek(0,SeekOrign.Begin);
+reportdocument.Close();
+reportDocument.Dispose();
+return File(stream,"application/pdf","BpcReport.pdf");
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
